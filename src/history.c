@@ -5,53 +5,58 @@
 int i =1;
 
 /*initialize the linked list to keep history*/
-
 List* init_history(){
-  //allocate space for the list, then for the root (first item in the list)
-  List *head = NULL;
-  head = (List*)malloc(sizeof(List));
-  head->root = (Item*)malloc(sizeof(Item));// REMOVE? DOES THIS CREATE THE EXTRE ITEM?
-  //head->root->next= (Item*)malloc(sizeof(Item));
+  List *head = (List*)malloc(sizeof(List)); /*allocate space for the list*/
+  head->root = NULL;
   return head;
 }
 
 /*add an item to the end of the list*/
 void add_history(List *list, char*str){
-  Item *current = list->root;
-  //check first if root is null, if so allocate the item there, if not go to the next,
-  //we move to the last element in the list, to allocate the new item in the positioin which is
-  //null
-  while(current->next != NULL){
-    current = current->next;
+  Item* current;
+  current = list->root;
+  if (list->root == NULL) {
+    list->root = (Item*) malloc(sizeof(Item));
+    list->root->id = i++;
+    list->root->str = str;
+    list->root->next = NULL;
+  } else {
+    while (current->next != NULL) {   /*loop to the last element*/
+      current = current->next;
+    }//get out of the loop when current->next is null
+    current->next = (Item*) malloc(sizeof(Item));   /*allocate memory for each item added*/
+    current->next->id = i++;
+    current->next->str =str;
+    current->next->next = NULL;
   }
-  current->next = (Item*)malloc(sizeof(Item));
-  current->next->str = str;
-  current->next->id = i++;
-  current->next->next = NULL;
 }
 
-/*retrieve the string storen in the node where item->id == id*/
+/*return the string stored in the list where item->id == id*/
 char *get_history(List *list, int id){
-  Item *current = list->root;
-  while(current != NULL){
-    if(current->id == id){
-      return current->str;
+  if (list->root == NULL) {
+    return "empty list";
+  } else {
+    Item* current = list->root;
+    while (current != NULL) {
+      if (current->id == id) {
+	return current->str;
+      }
+      current = current->next;
     }
-    current = current->next;
+    return "wrong"; /* in case another number is press that is not on the list*/
   }
 }
 
+/*prints the items of the list*/
 void print_history(List *list){
   Item *current = list->root;
   while(current != NULL){
-    /*while(current->str == NULL){
-     current = current->next;
-    }*/
     printf("%d.- %s \n", current->id, current->str);
     current = current->next;
   }
 }
 
+/*free the items of the list*/
 void free_history(List *list){
   Item *current = list->root;
   while(current != NULL){
@@ -60,11 +65,3 @@ void free_history(List *list){
   }
   free(list);
 }
-
-
-
-
-
-
-
-
