@@ -33,18 +33,14 @@ void add_history(List *list, char*str){
 
 /*return the string stored in the list where item->id == id*/
 char *get_history(List *list, int id){
-  if (list->root == NULL) {
-    return "empty list";
-  } else {
     Item* current = list->root;
     while (current != NULL) {
       if (current->id == id) {
+	
 	return current->str;
-      }
+	}
       current = current->next;
     }
-    return "wrong"; /* in case another number is press that is not on the list*/
-  }
 }
 
 /*prints the items of the list*/
