@@ -3,27 +3,46 @@
 #include "tokenizer.h"
 #include "history.h"
 
-int main(){
-  
-  char *str = "\t hello \tUTEP is ok\t  \t";
-  print_tokens(tokenize(str));
-  print_tokens(tokenize("   hello  world    "));
-  print_tokens(tokenize("a b  c d\t e f g  h  k\t"));
- 
+int main (){
 
- List *list = init_history();
-  add_history(list,str);
-  add_history(list,"miguel munoz h");
-  add_history(list,"testing the history part ");
+  char in[60];
+  List *list = init_history();
+  int selection;
+  int innerSel;
+  while(selection != -1){
+    printf("enter 1 to tokenize a string\n      2 to print history\n     -1 to quit\n");
 
-  printf("%s\n","Printing history of words:");
-  
-  print_history(list);
-  // get_history(list,1);    
-  print_tokens(tokenize(get_history(list,3)));
+    scanf("%d",&selection);
+    char tmp;
+    scanf("%c",&tmp);
+    
+    if(selection == 1){
+      printf("Enter string to tokenize:\n > ");
+      fgets(in,100,stdin);
+      add_history(list,in);
+      char **tokens = tokenize(in);
+      print_tokens(tokens);/*print tokens*/
+      free_tokens(tokens); /*free the emmory used to allocate the tokens*/      
+      
+    }
+    if(selection == 2){
+      printf("\nHistory of strings:\n");
+      print_history(list);
+      printf("\nSelect a string number to print or -1 to go back\n");
 
-  /*free history when we exit the program*/
+      scanf("%d",&innerSel);
+      char tmp;
+      scanf("%c",&tmp);
+      if(innerSel != -1){
+      char ** token = tokenize(get_history(list,innerSel));
+      print_tokens(token);
+      free_tokens(token);	
+      }
+    }
+  }
+  printf("\nBYE!\n");
   free_history(list);
-  
+    
 return 0;
 }
+

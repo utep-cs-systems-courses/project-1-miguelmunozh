@@ -23,7 +23,6 @@ int non_space_char(char c){
 char *word_start(char *str){
   int i = 0;
   while(1){
-    //if the char at s[i] is not a space or tab, then it is the first char and we return it
     if(non_space_char(str[i])){
       return &str[i];
     }
@@ -34,7 +33,6 @@ char *word_start(char *str){
 char *word_terminator(char *str){
   int i = 0;
   while(1){ 
-    /*if the char s[i] is a space and the cha s[i-1] is a char, return it, i++ otherwise*/
     if((space_char(str[i])) && (non_space_char(str[i-1]))){
       return &str[i];
     }
@@ -47,7 +45,7 @@ int count_words(char *str){
   int i = 0;
   int words = 0;
   while(1){
-    /*if current char is a space/tab and the char before is a char, we have a word*/
+    /*if current char is a space and the char before is a char, we have a word*/
     if(space_char(str[i]) && non_space_char(prevChar)){
 	words++;
       }
@@ -71,25 +69,25 @@ char *copy_str(char *inStr, short len){
   copy[i] = '\0'; /* zero terminator */
   return copy;
 }
+
 /*function to return tokenized string*/
 char** tokenize(char * str){
   int total = count_words(str);
   char **token = (char**)malloc((total+1) * sizeof(char**)); /*allocating memory for char** */
   int i;
   for(i = 0; i < total; i++){
-    token[i] = malloc((total+1) * sizeof(char*)); /*allocate space for evry string*/
-
-    //start and end of each word
+    token[i] = malloc((total+1) * sizeof(char*)); /*allocate space for evry word*/
+    
     char* start = word_start(str);
     char* end = word_terminator(start);
-    /*we copy the word in the array at position i*/
+    /*we copy the word in the 'array' at position i*/
     token[i] = copy_str(start, (end - start));
-    /*update the position of word start after the end fo the word that we just saved*/
+    /*call word start after the word that we just saved, so that it looks for the next word*/
     str = word_start(end);
   }
   return token;
-
   free_tokens(token); /*free the emmory used to allocate the tokens*/
+
 }
 
 /*changed \0 to NULL because i was getting a warning*/
